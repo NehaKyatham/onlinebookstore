@@ -6,7 +6,7 @@ node {
 
     stage('Checkout Code') {
         git branch: 'master',
-            url: 'https://github.com/<your-username>/online-book-store.git'
+            url: 'https://github.com/NehaKyatham/online-book-store.git'
     }
 
     stage('Build WAR (Maven)') {
