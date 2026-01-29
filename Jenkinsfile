@@ -6,36 +6,36 @@ node {
 
     stage('Checkout Code') {
         git branch: 'master',
-            url: 'https://github.com/NehaKyatham/onlinebookstore.git'
+            url: 'https://github.com/<your-username>/online-book-store.git'
     }
 
     stage('Build WAR (Maven)') {
-        sh '''
-            mvn clean package -DskipTests
-        '''
+        sh """
+        mvn -Dmaven.repo.local=/var/lib/jenkins/.m2/repository clean package -DskipTests
+        """
     }
 
     stage('Verify WAR') {
-        sh '''
-            ls -lh target/*.war
-        '''
+        sh """
+        ls -lh target/*.war
+        """
     }
 
     stage('Build Docker Image') {
         sh """
-            docker build -t ${imageName} .
+        docker build -t ${imageName} .
         """
     }
 
     stage('Deploy Tomcat Container') {
         sh """
-            docker stop ${containerName} || true
-            docker rm ${containerName} || true
+        docker stop ${containerName} || true
+        docker rm ${containerName} || true
 
-            docker run -d \
-                --name ${containerName} \
-                -p ${appPort}:8080 \
-                ${imageName}
+        docker run -d \
+            --name ${containerName} \
+            -p ${appPort}:8080 \
+            ${imageName}
         """
     }
 }
